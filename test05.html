@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	html,body{
+		width: 100%;
+	}
+	div{
+			width: 0;
+			overflow: hidden;
+	}
+	@keyframes div{
+		0%{
+			width: 0;
+		}
+		100%{
+			width: 100%;
+		}
+	}
+	div{
+		width: 100%;
+		overflow: hidden;
+
+		transition-timing-function: steps(12);
+		
+		animation:div 12s 10ms;
+	}
+
+	</style>
+</head>
+<body>
+	<div>康儒</div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, ol {
+            list-style: none;
+        }
+
+        html, body, ul, ul li {
+            width: 100%;
+            height: 100%;
+        }
+
+        ol {
+            position: fixed;
+            top: 50px;
+            left: 50px;
+        }
+
+        ol li {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<ul class = "ul-1">
+ <li>5</li>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+     <li>1</li>
+</ul>
+
+<ol>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ol>
+
+</body>
+</html>
+<script>
+    var timer = null;
+    //var leader = 0;
+    //找人
+    var ol = document.getElementsByTagName("ol")[0];
+    var olLis = ol.children;
+    var ul = document.getElementsByTagName("ul")[0];
+    var ulLis = ul.children;
+
+    var arr = ["red", "orange", "yellow", "green", "blue"];
+    for (var i = 0; i < arr.length; i++) {
+        olLis[i].style.backgroundColor = arr[i];
+        ulLis[i].style.backgroundColor = arr[i];
+    }
+
+    /*window.onscroll = function () {
+        leader = window.pageYOffset;//当前页面被卷去的头部
+    };*/
+
+
+    //给所有的olLis注册点击事件
+    // for (var j = 0; j < olLis.length; j++) {
+    //     olLis[j].index = j;
+    //     olLis[j].onclick = function () {
+    //         //让窗体滚动到指定位置
+    //         //就是要滚动到 要去的ul 的 offsetTop的值
+    //         //当前点击的是ol中的哪个li 就去到ul中的那个li
+    //         var target = ulLis[this.index].offsetTop;
+    //         //window.scrollTo(0, target);
+    //         //之前封装的缓动框架只能设置属性 而我们这里要的是一个渐渐变化的值
+    //         clearInterval(timer);
+    //         timer = setInterval(function () {
+    //             //step = (target - leader) / 10
+    //             //leader = leader + step
+    //             var leader = window.pageYOffset;//当前页面被卷去的头部
+    //             var step = (target - leader) / 10;
+    //             step = step > 0 ? Math.ceil(step) : Math.floor(step);
+    //             leader = leader + step;
+    //             //console.log(leader);
+    //             window.scrollTo(0, leader);
+    //             if (leader === target) {
+    //                 clearInterval(timer);
+    //             }
+    //         }, 20);
+    //     };
+    // }
+</script>
+
+<script>
+     var ismove = false;
+     var start = 0;
+     var moveY = 0;
+     var distanceY=0;
+     var index= 0;
+     var leader = null
+
+    var ul_1 = document.querySelector('.ul-1')
+    var ulLis = ul_1.children;
+    console.log(ulLis)
+
+    var li = ul_1.children[0];
+    var height = li.offsetHeight;
+
+     window.onscroll = function(){
+        
+        leader = window.pageYOffset;
+        console.log(leader);
+
+     }
+
+    ul_1.addEventListener('touchstart',function(event){
+        clearInterval(timer);
+        startY = event.touches[0].clientY;
+    });
+
+    ul_1.addEventListener('touchmove',function(event){
+        isMove = true;
+        moveY = event.touches[0].clientY;
+        distanceY= moveY- startY;
+        // removeTransition();
+        // setTranslatY(-index*width);
+
+
+    });
+
+    ul_1.addEventListener('touchend',function(){
+
+
+        if(Math.abs(distanceY)>height/4&&isMove){
+
+                if(distanceY<0){
+                    index++;
+                    var target = ulLis[index].offsetTop;
+                //window.scrollTo(0, target);
+                //之前封装的缓动框架只能设置属性 而我们这里要的是一个渐渐变化的值
+                    clearInterval(timer);
+                    timer = setInterval(function () {
+                        //step = (target - leader) / 10
+                        //leader = leader + step
+                        var leader = window.pageYOffset;//当前页面被卷去的头部
+                        var step = (target - leader) / 10;
+                        step = step > 0 ? Math.ceil(step) : Math.floor(step);
+                        leader = leader + step;
+                       
+                        window.scrollTo(0, leader);
+                        if (leader === target) {
+                            clearInterval(timer);
+                        }
+                }, 20);
+
+            }else{
+
+            //alert("kfkjjhj");
+                index--;
+                var target = ulLis[index].offsetTop;
+            //window.scrollTo(0, target);
+            //之前封装的缓动框架只能设置属性 而我们这里要的是一个渐渐变化的值
+                clearInterval(timer);
+                timer = setInterval(function () {
+                    //step = (target - leader) / 10
+                    //leader = leader + step
+                    var leader = window.pageYOffset;//当前页面被卷去的头部
+                    var step = (target - leader) / 10;
+                    step = step > 0 ? Math.ceil(step) : Math.floor(step);
+                    leader = leader + step;
+                    //console.log(leader);
+                    window.scrollTo(0, leader);
+                    if (leader === target) {
+                        clearInterval(timer);
+                    }
+                }, 20);
+            }
+            // addTransition();
+            // setTranslatY(-index*width);
+           
+        }else{
+
+            removeTransition();
+            setTranslatY(-index*height);
+           
+        }
+
+
+        isMove = false;
+        distanceY = 0;
+        startY= 0;
+        moveY= 0;
+
+        clearInterval(timer);
+        setInterval(function(){
+            index++;
+            addTransition();
+            setTranslatY(-index*height);
+        },3000);
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+     function setTranslatY(y) {
+            ul_1.style.webkitTransform = "translateY(" + y+ "px)";//兼容
+            ul_1.style.transform = "translateY(" + y + "px)";
+
+        }
+
+    //添加过度
+    function addTransition() {
+        ul_1.style.webkitTtransition = "all .2s";//兼容
+        ul_1.style.transition = "all .2s";
+    }
+
+    //移除过度
+    function removeTransition() {
+        ul_1.style.webkitTtransition = "none";//兼容
+        ul_1.style.transition = "none";
+    }
+
+</script>
